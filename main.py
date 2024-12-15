@@ -768,8 +768,10 @@ class Ghost:
 
     # MOVEMENT PATTERN: CYAN GHOST
     def move_cyan_ghost(self):
-        # r, l, u, d
-        # cyan_ghost turns up or down at any point to pursue, but left and right only on collision
+
+        # Behavior: Pursues the player but emphasizes vertical movement to align with the player and then moves horizontally.
+        # Tendency: Prefers up/down movement unless blocked, only moving horizontally when necessary.
+     
         if self.direction == 0:
             if self.target[0] > self.ghost_x and self.turns[0]:
                 self.ghost_x += self.speed
