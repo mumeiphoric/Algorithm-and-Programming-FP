@@ -712,48 +712,63 @@ class Ghost:
         if self.direction == 0:  # Moving right
             if self.target[0] > self.ghost_x and self.turns[0]:  # Check if player is to the right
                 self.ghost_x += self.speed
+             
             elif self.target[1] > self.ghost_y and self.turns[3]:  # Check if player is below
                 self.direction = 3
                 self.ghost_y += self.speed
+             
             elif self.target[1] < self.ghost_y and self.turns[2]:  # Check if player is above
                 self.direction = 2
                 self.ghost_y -= self.speed
+             
             elif self.target[0] < self.ghost_x and self.turns[1]:  # Check if player is to the left
                 self.direction = 1
                 self.ghost_x -= self.speed
+             
         elif self.direction == 1:  # Moving left
             if self.target[0] < self.ghost_x and self.turns[1]:  # Check if player is to the left
                 self.ghost_x -= self.speed
+             
             elif self.target[1] > self.ghost_y and self.turns[3]:  # Check if player is below
                 self.direction = 3
                 self.ghost_y += self.speed
+             
             elif self.target[1] < self.ghost_y and self.turns[2]:  # Check if player is above
                 self.direction = 2
                 self.ghost_y -= self.speed
+             
             elif self.target[0] > self.ghost_x and self.turns[0]:  # Check if player is to the right
                 self.direction = 0
                 self.ghost_x += self.speed
+             
         elif self.direction == 2:  # Moving up
             if self.target[1] < self.ghost_y and self.turns[2]:  # Check if player is above
                 self.ghost_y -= self.speed
+             
             elif self.target[0] > self.ghost_x and self.turns[0]:  # Check if player is to the right
                 self.direction = 0
                 self.ghost_x += self.speed
+             
             elif self.target[0] < self.ghost_x and self.turns[1]:  # Check if player is to the left
                 self.direction = 1
                 self.ghost_x -= self.speed
+             
             elif self.target[1] > self.ghost_y and self.turns[3]:  # Check if player is below
                 self.direction = 3
                 self.ghost_y += self.speed
+             
         elif self.direction == 3:  # Moving down
             if self.target[1] > self.ghost_y and self.turns[3]:  # Check if player is below
                 self.ghost_y += self.speed
+             
             elif self.target[0] > self.ghost_x and self.turns[0]:  # Check if player is to the right
                 self.direction = 0
                 self.ghost_x += self.speed
+             
             elif self.target[0] < self.ghost_x and self.turns[1]:  # Check if player is to the left
                 self.direction = 1
                 self.ghost_x -= self.speed
+             
             elif self.target[1] < self.ghost_y and self.turns[2]:  # Check if player is above
                 self.direction = 2
                 self.ghost_y -= self.speed
@@ -772,123 +787,169 @@ class Ghost:
         # Behavior: Pursues the player but emphasizes vertical movement to align with the player and then moves horizontally.
         # Tendency: Prefers up/down movement unless blocked, only moving horizontally when necessary.
      
-        if self.direction == 0:
-            if self.target[0] > self.ghost_x and self.turns[0]:
+        if self.direction == 0:  # If the ghost is currently moving right
+            if self.target[0] > self.ghost_x and self.turns[0]:  # If target is to the right and the ghost can move right
                 self.ghost_x += self.speed
-            elif not self.turns[0]:
+            elif not self.turns[0]:  # If movement to the right is blocked
+                # Check for vertical alignment opportunities
+                if self.target[1] > self.ghost_y and self.turns[3]:  # Target is below and can move down
+                    self.direction = 3
+                    self.ghost_y += self.speed
+                 
+                elif self.target[1] < self.ghost_y and self.turns[2]:  # Target is above and can move up
+                    self.direction = 2
+                    self.ghost_y -= self.speed
+                 
+                elif self.target[0] < self.ghost_x and self.turns[1]:  # Target is to the left and can move left
+                    self.direction = 1
+                    self.ghost_x -= self.speed
+                 
+                else:  # Fallback options when main paths are blocked
+                    if self.turns[3]:
+                        self.direction = 3
+                        self.ghost_y += self.speed
+                     
+                    elif self.turns[2]:
+                        self.direction = 2
+                        self.ghost_y -= self.speed
+                     
+                    elif self.turns[1]:
+                        self.direction = 1
+                        self.ghost_x -= self.speed
+                     
+            elif self.turns[0]:  # Can move right again after a blockage
                 if self.target[1] > self.ghost_y and self.turns[3]:
                     self.direction = 3
                     self.ghost_y += self.speed
+                 
                 elif self.target[1] < self.ghost_y and self.turns[2]:
                     self.direction = 2
                     self.ghost_y -= self.speed
-                elif self.target[0] < self.ghost_x and self.turns[1]:
-                    self.direction = 1
-                    self.ghost_x -= self.speed
-                elif self.turns[3]:
-                    self.direction = 3
-                    self.ghost_y += self.speed
-                elif self.turns[2]:
-                    self.direction = 2
-                    self.ghost_y -= self.speed
-                elif self.turns[1]:
-                    self.direction = 1
-                    self.ghost_x -= self.speed
-            elif self.turns[0]:
-                if self.target[1] > self.ghost_y and self.turns[3]:
-                    self.direction = 3
-                    self.ghost_y += self.speed
-                if self.target[1] < self.ghost_y and self.turns[2]:
-                    self.direction = 2
-                    self.ghost_y -= self.speed
+                 
                 else:
                     self.ghost_x += self.speed
-        elif self.direction == 1:
-            if self.target[1] > self.ghost_y and self.turns[3]:
+
+        elif self.direction == 1:  # If the ghost is currently moving left
+            if self.target[1] > self.ghost_y and self.turns[3]:  # Target is below and can move down
                 self.direction = 3
-            elif self.target[0] < self.ghost_x and self.turns[1]:
+             
+            elif self.target[0] < self.ghost_x and self.turns[1]:  # Target is to the left and can move left
                 self.ghost_x -= self.speed
-            elif not self.turns[1]:
+             
+            elif not self.turns[1]:  # If left movement is blocked
+                # Check other movement options
+                if self.target[1] > self.ghost_y and self.turns[3]:  # Target is below and can move down
+                    self.direction = 3
+                    self.ghost_y += self.speed
+                 
+                elif self.target[1] < self.ghost_y and self.turns[2]:  # Target is above and can move up
+                    self.direction = 2
+                    self.ghost_y -= self.speed
+                 
+                elif self.target[0] > self.ghost_x and self.turns[0]:  # Target is to the right and can move right
+                    self.direction = 0
+                    self.ghost_x += self.speed
+                 
+                else:  # Fallback options
+                    if self.turns[3]:
+                        self.direction = 3
+                        self.ghost_y += self.speed
+                     
+                    elif self.turns[2]:
+                        self.direction = 2
+                        self.ghost_y -= self.speed
+                     
+                    elif self.turns[0]:
+                        self.direction = 0
+                        self.ghost_x += self.speed
+                     
+            elif self.turns[1]:  # Can move left again
                 if self.target[1] > self.ghost_y and self.turns[3]:
                     self.direction = 3
                     self.ghost_y += self.speed
+                 
                 elif self.target[1] < self.ghost_y and self.turns[2]:
                     self.direction = 2
                     self.ghost_y -= self.speed
-                elif self.target[0] > self.ghost_x and self.turns[0]:
-                    self.direction = 0
-                    self.ghost_x += self.speed
-                elif self.turns[3]:
-                    self.direction = 3
-                    self.ghost_y += self.speed
-                elif self.turns[2]:
-                    self.direction = 2
-                    self.ghost_y -= self.speed
-                elif self.turns[0]:
-                    self.direction = 0
-                    self.ghost_x += self.speed
-            elif self.turns[1]:
-                if self.target[1] > self.ghost_y and self.turns[3]:
-                    self.direction = 3
-                    self.ghost_y += self.speed
-                if self.target[1] < self.ghost_y and self.turns[2]:
-                    self.direction = 2
-                    self.ghost_y -= self.speed
+                 
                 else:
                     self.ghost_x -= self.speed
-        elif self.direction == 2:
-            if self.target[1] < self.ghost_y and self.turns[2]:
-                self.direction = 2
+
+        elif self.direction == 2:  # If the ghost is currently moving up
+            if self.target[1] < self.ghost_y and self.turns[2]:  # Target is above and can move up
                 self.ghost_y -= self.speed
-            elif not self.turns[2]:
-                if self.target[0] > self.ghost_x and self.turns[0]:
+             
+            elif not self.turns[2]:  # If upward movement is blocked
+                # Check horizontal and downward alignment opportunities
+                if self.target[0] > self.ghost_x and self.turns[0]:  # Target is to the right and can move right
                     self.direction = 0
                     self.ghost_x += self.speed
-                elif self.target[0] < self.ghost_x and self.turns[1]:
+                 
+                elif self.target[0] < self.ghost_x and self.turns[1]:  # Target is to the left and can move left
                     self.direction = 1
                     self.ghost_x -= self.speed
-                elif self.target[1] > self.ghost_y and self.turns[3]:
+                 
+                elif self.target[1] > self.ghost_y and self.turns[3]:  # Target is below and can move down
                     self.direction = 3
                     self.ghost_y += self.speed
-                elif self.turns[1]:
-                    self.direction = 1
-                    self.ghost_x -= self.speed
-                elif self.turns[3]:
-                    self.direction = 3
-                    self.ghost_y += self.speed
-                elif self.turns[0]:
-                    self.direction = 0
-                    self.ghost_x += self.speed
-            elif self.turns[2]:
+                 
+                else:  # Fallback options
+                    if self.turns[1]:
+                        self.direction = 1
+                        self.ghost_x -= self.speed
+                     
+                    elif self.turns[3]:
+                        self.direction = 3
+                        self.ghost_y += self.speed
+                     
+                    elif self.turns[0]:
+                        self.direction = 0
+                        self.ghost_x += self.speed
+                     
+            elif self.turns[2]:  # Can move up again
                 self.ghost_y -= self.speed
-        elif self.direction == 3:
-            if self.target[1] > self.ghost_y and self.turns[3]:
+
+        elif self.direction == 3:  # If the ghost is currently moving down
+            if self.target[1] > self.ghost_y and self.turns[3]:  # Target is below and can move down
                 self.ghost_y += self.speed
-            elif not self.turns[3]:
-                if self.target[0] > self.ghost_x and self.turns[0]:
+             
+            elif not self.turns[3]:  # If downward movement is blocked
+                # Check horizontal and upward alignment opportunities
+                if self.target[0] > self.ghost_x and self.turns[0]:  # Target is to the right and can move right
                     self.direction = 0
                     self.ghost_x += self.speed
-                elif self.target[0] < self.ghost_x and self.turns[1]:
+                 
+                elif self.target[0] < self.ghost_x and self.turns[1]:  # Target is to the left and can move left
                     self.direction = 1
                     self.ghost_x -= self.speed
-                elif self.target[1] < self.ghost_y and self.turns[2]:
+                 
+                elif self.target[1] < self.ghost_y and self.turns[2]:  # Target is above and can move up
                     self.direction = 2
                     self.ghost_y -= self.speed
-                elif self.turns[2]:
-                    self.direction = 2
-                    self.ghost_y -= self.speed
-                elif self.turns[1]:
-                    self.direction = 1
-                    self.ghost_x -= self.speed
-                elif self.turns[0]:
-                    self.direction = 0
-                    self.ghost_x += self.speed
-            elif self.turns[3]:
+                 
+                else:  # Fallback options
+                    if self.turns[2]:
+                        self.direction = 2
+                        self.ghost_y -= self.speed
+                     
+                    elif self.turns[1]:
+                        self.direction = 1
+                        self.ghost_x -= self.speed
+                     
+                    elif self.turns[0]:
+                        self.direction = 0
+                        self.ghost_x += self.speed
+                     
+            elif self.turns[3]:  # Can move down again
                 self.ghost_y += self.speed
+
+        # Wraparound behavior for when ghost moves out of bounds
         if self.ghost_x < -30:
             self.ghost_x = 900
         elif self.ghost_x > 900:
-            self.ghost_x - 30
+            self.ghost_x = -30
+
+        # Return the updated position and direction of the ghost
         return self.ghost_x, self.ghost_y, self.direction
 
     # MOVEMENT PATTERN: PINK GHOST
@@ -909,19 +970,24 @@ class Ghost:
                 if self.turns[1]:  # Can turn left
                     self.direction = 1
                     self.ghost_x -= self.speed
+
                 elif self.turns[2]:  # Can turn down
                     self.direction = 2
                     self.ghost_y -= self.speed
+
                 elif self.turns[3]:  # Can turn up
                     self.direction = 3
                     self.ghost_y += self.speed
+
             else:
                 if self.turns[0]:  # Can turn right
                     self.direction = 0
                     self.ghost_x += self.speed
+
                 elif self.turns[2]:  # Can turn down
                     self.direction = 2
                     self.ghost_y -= self.speed
+
                 elif self.turns[3]:  # Can turn up
                     self.direction = 3
                     self.ghost_y += self.speed
@@ -930,48 +996,63 @@ class Ghost:
             if self.direction == 0:
                 if self.turns[0]:
                     self.ghost_x += self.speed
+
                 elif self.turns[1]:
                     self.direction = 1
                     self.ghost_x -= self.speed
+
                 elif self.turns[2]:
                     self.direction = 2
                     self.ghost_y -= self.speed
+
                 elif self.turns[3]:
                     self.direction = 3
                     self.ghost_y += self.speed
+
             elif self.direction == 1:
                 if self.turns[1]:
                     self.ghost_x -= self.speed
+
                 elif self.turns[0]:
                     self.direction = 0
                     self.ghost_x += self.speed
+
                 elif self.turns[2]:
                     self.direction = 2
                     self.ghost_y -= self.speed
+
                 elif self.turns[3]:
                     self.direction = 3
                     self.ghost_y += self.speed
+
             elif self.direction == 2:
                 if self.turns[2]:
                     self.ghost_y -= self.speed
+
                 elif self.turns[0]:
                     self.direction = 0
                     self.ghost_x += self.speed
+
                 elif self.turns[1]:
                     self.direction = 1
                     self.ghost_x -= self.speed
+
                 elif self.turns[3]:
                     self.direction = 3
                     self.ghost_y += self.speed
+
             elif self.direction == 3:
                 if self.turns[3]:
                     self.ghost_y += self.speed
+
                 elif self.turns[0]:
                     self.direction = 0
                     self.ghost_x += self.speed
+
                 elif self.turns[1]:
                     self.direction = 1
                     self.ghost_x -= self.speed
+
                 elif self.turns[2]:
                     self.direction = 2
                     self.ghost_y -= self.speed
@@ -999,6 +1080,7 @@ def get_targets(red_x, red_y, cyan_x, cyan_y, pink_x, pink_y, orange_x, orange_y
 
     if powerup:
         
+        # RED GHOST
         # If red ghost not dead, scatter
         if not red_ghost.dead and not killed_ghosts[0]:
             reds_target = (scatter_x, scatter_y)
@@ -1016,8 +1098,9 @@ def get_targets(red_x, red_y, cyan_x, cyan_y, pink_x, pink_y, orange_x, orange_y
         else:
             reds_target = return_target
 
+        # CYAN GHOST
         if not cyan_ghost.dead and not killed_ghosts[1]:
-            cyans_target = (scatter_x, pacman_y)
+            cyans_target = (scatter_x, scatter_y)
 
         elif not cyan_ghost.dead and killed_ghosts[1]:
             if 340 < cyan_x < 560 and 340 < cyan_y < 500:
@@ -1025,12 +1108,13 @@ def get_targets(red_x, red_y, cyan_x, cyan_y, pink_x, pink_y, orange_x, orange_y
 
             else:
                 cyans_target = (pacman_x, pacman_y)
-                
+        
         else:
             cyans_target = return_target
 
+        # PINK GHOST
         if not pink_ghost.dead:
-            pinks_target = (pacman_x, scatter_y)
+            pinks_target = (scatter_x, scatter_y)
 
         elif not pink_ghost.dead and killed_ghosts[2]:
             if 340 < pink_x < 560 and 340 < pink_y < 500:
@@ -1042,8 +1126,9 @@ def get_targets(red_x, red_y, cyan_x, cyan_y, pink_x, pink_y, orange_x, orange_y
         else:
             pinks_target = return_target
 
+        # ORANGE GHOST
         if not orange_ghost.dead and not killed_ghosts[3]:
-            oranges_target = (450, 450)
+            oranges_target = (scatter_x, scatter_y)
 
         elif not orange_ghost.dead and killed_ghosts[3]:
             if 340 < orange_x < 560 and 340 < orange_y < 500:
@@ -1056,15 +1141,15 @@ def get_targets(red_x, red_y, cyan_x, cyan_y, pink_x, pink_y, orange_x, orange_y
             oranges_target = return_target
 
     else:
-        if not red_ghost.dead:
-            if 340 < red_x < 560 and 340 < red_y < 500:
-                reds_target = (400, 100)
+        if not red_ghost.dead: # Check if the red ghost is alive
+            if 340 < red_x < 560 and 340 < red_y < 500: # Check if the red ghost is within the spawn area
+                reds_target = (400, 100) # Target a point outside the spawn area
 
             else:
-                reds_target = (pacman_x, pacman_y)
+                reds_target = (pacman_x, pacman_y) # target pacman
 
         else:
-            reds_target = return_target
+            reds_target = return_target # go back to spawn
 
         if not cyan_ghost.dead:
             if 340 < cyan_x < 560 and 340 < cyan_y < 500:
@@ -1105,7 +1190,7 @@ def get_targets(red_x, red_y, cyan_x, cyan_y, pink_x, pink_y, orange_x, orange_y
 
 # BACKGROUND MUSIC
 pygame.mixer.music.load('audio/pacman_theme.wav')
-pygame.mixer.music.set_volume(0.7)
+pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
 
 run = True
@@ -1142,7 +1227,7 @@ while run:
     draw_map()
 
     # Center of Pacman
-    center_actor_x = pacman_x + 23
+    center_actor_x = pacman_x + 23 # Tweaked
     center_actor_y = pacman_y + 24
 
     # Ghost Speeds
@@ -1222,21 +1307,25 @@ while run:
     # PACMAN COLLISIONS
     score, powerup, power_cycle, killed_ghosts = pacman_collisions(score, powerup, power_cycle, killed_ghosts) 
 
+    # HANDLING COLLISIONS WITHOUT POWER-UP
     if not powerup:
-        if (player_circle.colliderect(red_ghost.rect) and not red_ghost.dead) or \
-                (player_circle.colliderect(cyan_ghost.rect) and not cyan_ghost.dead) or \
-                (player_circle.colliderect(pink_ghost.rect) and not pink_ghost.dead) or \
-                (player_circle.colliderect(orange_ghost.rect) and not orange_ghost.dead):
+        if (player_circle.colliderect(red_ghost.rect) and not red_ghost.dead) or (player_circle.colliderect(cyan_ghost.rect) and not cyan_ghost.dead) or \
+            (player_circle.colliderect(pink_ghost.rect) and not pink_ghost.dead) or (player_circle.colliderect(orange_ghost.rect) and not orange_ghost.dead):
             
+            # LIFE REDUCTION AND GAME RESET
             if lives > 0:
                 lives -= 1
                 start_timer = 0 
                 powerup = False
                 power_cycle = 0
+            
+            # RESETTING PAC-MAN'S POSITION
                 pacman_x = 430
                 pacman_y = 660
                 direction = 0
                 direction_cmd = 0
+
+            # RESETTING GHOST POSITIONS AND STATES
                 red_ghost_x = 430
                 red_ghost_y = 325
                 red_ghost_direction = 0
@@ -1249,6 +1338,8 @@ while run:
                 orange_ghost_x = 480
                 orange_ghost_y = 410
                 orange_ghost_direction = 2
+            
+            # RESETTING GAME STATE VARIABLES
                 killed_ghosts = [False, False, False, False]
                 red_ghost_dead = False
                 cyan_ghost_dead = False
@@ -1258,16 +1349,25 @@ while run:
                 game_over = True
                 moving = False
                 start_timer = 0
+
+    # KILLING GHOSTS DURING POWER-UP
+
+    # RED GHOST
     if powerup and player_circle.colliderect(red_ghost.rect) and killed_ghosts[0] and not red_ghost.dead:
+        
+        # LIFE REDUCTION AND GAME RESET
         if lives > 0:
             powerup = False
             power_cycle = 0
             lives -= 1
             start_timer = 0
+        # RESETTING PAC-MAN'S POSITION
             pacman_x = 430
             pacman_y = 660
             direction = 0
             direction_cmd = 0
+        
+        # RESETTING GAME STATE VARIABLES
             red_ghost_x = 430
             red_ghost_y = 410
             red_ghost_direction = 0
@@ -1280,6 +1380,8 @@ while run:
             orange_ghost_x = 480
             orange_ghost_y = 410
             orange_ghost_direction = 2
+
+        # RESETTING GHOST POSITIONS AND STATES
             killed_ghosts = [False, False, False, False]
             red_ghost_dead = False
             cyan_ghost_dead = False
@@ -1289,16 +1391,24 @@ while run:
             game_over = True
             moving = False
             start_timer = 0
+
+    # CYAN GHOST
     if powerup and player_circle.colliderect(cyan_ghost.rect) and killed_ghosts[1] and not cyan_ghost.dead:
+        
+        # LIFE REDUCTION AND GAME RESET
         if lives > 0:
             powerup = False
             power_cycle = 0
             lives -= 1
             start_timer = 0
+        
+        # RESETTING PAC-MAN'S POSITION
             pacman_x = 430
             pacman_y = 660
             direction = 0
             direction_cmd = 0
+        
+        # RESETTING GAME STATE VARIABLES
             red_ghost_x = 430
             red_ghost_y = 325
             red_ghost_direction = 0
@@ -1311,6 +1421,8 @@ while run:
             orange_ghost_x = 480
             orange_ghost_y = 410
             orange_ghost_direction = 2
+        
+        # RESETTING GHOST POSITIONS AND STATES
             killed_ghosts = [False, False, False, False]
             red_ghost_dead = False
             cyan_ghost_dead = False
@@ -1320,16 +1432,24 @@ while run:
             game_over = True
             moving = False
             start_timer = 0
+
+    # PINK GHOST
     if powerup and player_circle.colliderect(pink_ghost.rect) and killed_ghosts[2] and not pink_ghost.dead:
+        
+        # LIFE REDUCTION AND GAME RESET
         if lives > 0:
             powerup = False
             power_cycle = 0
             lives -= 1
             start_timer = 0
+        
+        # RESETTING PAC-MAN'S POSITION
             pacman_x = 430
             pacman_y = 660
             direction = 0
             direction_cmd = 0
+
+        # RESETTING GAME STATE VARIABLES
             red_ghost_x = 430
             red_ghost_y = 325
             red_ghost_direction = 0
@@ -1342,6 +1462,8 @@ while run:
             orange_ghost_x = 480
             orange_ghost_y = 410
             orange_ghost_direction = 2
+
+        # RESETTING GHOST POSITIONS AND STATES
             killed_ghosts = [False, False, False, False]
             red_ghost_dead = False
             cyan_ghost_dead = False
@@ -1351,16 +1473,24 @@ while run:
             game_over = True
             moving = False
             start_timer = 0
+
+    # ORANGE GHOST
     if powerup and player_circle.colliderect(orange_ghost.rect) and killed_ghosts[3] and not orange_ghost.dead:
+        
+        # LIFE REDUCTION AND GAME RESET
         if lives > 0:
             powerup = False
             power_cycle = 0
             lives -= 1
             start_timer = 0
+
+        # RESETTING PAC-MAN'S POSITION
             pacman_x = 430
             pacman_y = 660
             direction = 0
             direction_cmd = 0
+
+        # RESETTING GAME STATE VARIABLES
             red_ghost_x = 430
             red_ghost_y = 325
             red_ghost_direction = 0
@@ -1370,6 +1500,8 @@ while run:
             pink_ghost_x = 430
             pink_ghost_y = 410
             pink_ghost_direction = 2
+            
+        # RESETTING GHOST POSITIONS AND STATES
             orange_ghost_x = 430 # x coord updated cause orange keeps getting stuck
             orange_ghost_y = 410 # y coord updated cause orange keeps getting stuck
             orange_ghost_direction = 2
@@ -1382,26 +1514,40 @@ while run:
             game_over = True
             moving = False
             start_timer = 0
+
+    # GHOSTS KILLED DURING POWER-UP
+
+    # RED GHOST KILLED DURING POWER-UP
     if powerup and player_circle.colliderect(red_ghost.rect) and not red_ghost.dead and not killed_ghosts[0]:
         red_ghost_dead = True
         killed_ghosts[0] = True
-        score += (2 ** killed_ghosts.count(True)) * 100
+        score += (2 ** killed_ghosts.count(True)) * 100 # Increase the score exponentially based on the number of ghosts killed
+
+    # CYAN GHOST KILLED DURING POWER-UP
     if powerup and player_circle.colliderect(cyan_ghost.rect) and not cyan_ghost.dead and not killed_ghosts[1]:
         cyan_ghost_dead = True
         killed_ghosts[1] = True
-        score += (2 ** killed_ghosts.count(True)) * 100
+        score += (2 ** killed_ghosts.count(True)) * 100 # Increase the score exponentially based on the number of ghosts killed
+
+    # PINK GHOST KILLED DURING POWER-UP
     if powerup and player_circle.colliderect(pink_ghost.rect) and not pink_ghost.dead and not killed_ghosts[2]:
         pink_ghost_dead = True
         killed_ghosts[2] = True
-        score += (2 ** killed_ghosts.count(True)) * 100
+        score += (2 ** killed_ghosts.count(True)) * 100 # Increase the score exponentially based on the number of ghosts killed
+    
+    # ORANGE GHOST KILLED DURING POWER-UP
     if powerup and player_circle.colliderect(orange_ghost.rect) and not orange_ghost.dead and not killed_ghosts[3]:
         orange_ghost_dead = True
         killed_ghosts[3] = True
-        score += (2 ** killed_ghosts.count(True)) * 100
+        score += (2 ** killed_ghosts.count(True)) * 100 # Increase the score exponentially based on the number of ghosts killed
 
+    # EVENTS IN GAME
     for event in pygame.event.get():
+
         if event.type == pygame.QUIT:
             run = False
+
+        # KEY EVENTS FOR PACMAN MOVEMENT
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d: # Arrow Right or 'D'
                 direction_cmd = 0
@@ -1412,37 +1558,52 @@ while run:
             if event.key == pygame.K_DOWN or event.key == pygame.K_s: # Arrow Down or 'S'
                 direction_cmd = 3
             if event.key == pygame.K_SPACE and (game_over or game_won): # Space bar to restart game
-                powerup = False
-                power_cycle = 0
-                lives -= 1
-                start_timer = 0
+                
+                powerup = False # Disable any active power-up
+                power_cycle = 0 # Reset the power-up duration counter
+                lives -= 1 # Decrease lives
+                start_timer = 0 # Reset the start delay timer
+
+                # RESET PACMAN DIRECTION AND POSITION
                 pacman_x = 430
                 pacman_y = 660
                 direction = 0
                 direction_cmd = 0
+
+                # GHOST POSITIONS AND DIRECTIONS RESET
                 red_ghost_x = 430
                 red_ghost_y = 325
-                red_ghost_direction = 0
+                red_ghost_direction = 0 # right
+
                 cyan_ghost_x = 380
                 cyan_ghost_y = 410
-                cyan_ghost_direction = 2
+                cyan_ghost_direction = 2 # up
+
                 pink_ghost_x = 430
                 pink_ghost_y = 410
-                pink_ghost_direction = 2
+                pink_ghost_direction = 2 # up
+
                 orange_ghost_x = 480
                 orange_ghost_y = 410
-                orange_ghost_direction = 2
+                orange_ghost_direction = 2 # up
+
+                # RESPAWN GHOSTS
                 killed_ghosts = [False, False, False, False]
                 red_ghost_dead = False
                 cyan_ghost_dead = False
                 orange_ghost_dead = False
                 pink_ghost_dead = False
+
+                # SCORE AND LIVES RESET
                 score = 0
                 lives = 3
+
+                # RESET GAME STATE AND MAP
                 map = layout
                 game_over = False
                 game_won = False
 
+        # HOLD DOWN DIRECTION
         if event.type == pygame.KEYUP:
             if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and direction_cmd == 0: # Arrow Right or 'D'
                 direction_cmd = direction
@@ -1453,6 +1614,9 @@ while run:
             if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and direction_cmd == 3: # Arrow Down or 'S'
                 direction_cmd = direction
 
+    # PAC-MAN AND GHOST MOVEMENTS
+
+    # Updates PacMan's direction if the commanded turn is valid
     if direction_cmd == 0 and valid_turns[0]:
         direction = 0
     if direction_cmd == 1 and valid_turns[1]:
@@ -1462,10 +1626,11 @@ while run:
     if direction_cmd == 3 and valid_turns[3]:
         direction = 3
 
-    if pacman_x > 900: # If Pacman has exceeded screen
-        pacman_x = -47
-    elif pacman_x < -50:
-        pacman_x = 897
+    # Moving across screen
+    if pacman_x > 900: # If PacMans x coord exceeds the screen's right boundary
+        pacman_x = -47 # Teleports PacMan to just outside the left boundary
+    elif pacman_x < -50: # If PacMans x coord exceeds the screen's left boundary
+        pacman_x = 897 # Teleports PacMan to just outside the right boundary
 
     # Respawn if ghosts make it back to spawn
     if red_ghost.in_spawn and red_ghost_dead:
