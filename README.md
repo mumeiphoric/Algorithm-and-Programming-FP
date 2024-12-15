@@ -18,6 +18,8 @@ https://www.youtube.com/watch?v=qtZ0hl-unM4
 
 https://youtu.be/9H27CimgPsQ?si=6HVLyXhUyz91pmU8
 
+https://youtu.be/uy-jhtJq6Tw?si=VZcYO5-S6xAO1xr0
+
 https://openclipart.org/detail/216180/8bit-heart
 
 https://pixelaholic.itch.io/pac-man-game-art
